@@ -1,152 +1,107 @@
 [
   {
     "id": 1,
-    "name": "Alice Mercer",
-    "username": "alice_mercer",
-    "email": "alice.mercer@email.com",
+    "name": "Alice Johnson",
+    "email": "alice.johnson@email.com",
     "age": 28,
-    "phone": "+1-202-555-0143",
-    "status": "active",
-    "address": "12 Maple Street, Austin, TX 78701, USA"
+    "phone": "+1-555-234-5678"
   },
   {
     "id": 2,
     "name": "Brian Okafor",
-    "username": "brian_ok",
-    "email": "b.okafor@webmail.com",
+    "email": "brian.okafor@email.com",
     "age": 34,
-    "phone": "+1-415-555-0198",
-    "status": "active",
-    "address": "7 Redwood Ave, San Francisco, CA 94103, USA"
+    "phone": "+234-802-345-6789"
   },
   {
     "id": 3,
-    "name": "Clara Santos",
-    "username": "clarasantos",
-    "email": "clarasantos@proton.me",
+    "name": "Carla Mendes",
+    "email": "carla.mendes@email.com",
     "age": 22,
-    "phone": "+55-11-91234-5678",
-    "status": "inactive",
-    "address": "Rua das Flores 45, São Paulo, SP 01310-100, Brazil"
+    "phone": "+55-11-91234-5678"
   },
   {
     "id": 4,
-    "name": "David Kimura",
-    "username": "dkimura",
-    "email": "david.kimura@techmail.io",
-    "age": 41,
-    "phone": "+81-3-5555-6789",
-    "status": "active",
-    "address": "3-8 Shibuya, Tokyo 150-0002, Japan"
+    "name": "David Kim",
+    "email": "david.kim@email.com",
+    "age": 45,
+    "phone": "+82-10-2345-6789"
   },
   {
     "id": 5,
-    "name": "Elena Petrov",
-    "username": "elena_p",
-    "email": "e.petrov@mailbox.org",
-    "age": 29,
-    "phone": "+7-495-555-3421",
-    "status": "suspended",
-    "address": "Tverskaya Ulitsa 18, Moscow 125009, Russia"
+    "name": "Esther Nwosu",
+    "email": "esther.nwosu@email.com",
+    "age": 30,
+    "phone": "+234-703-456-7890"
   },
   {
     "id": 6,
-    "name": "Felix Adekunle",
-    "username": "felixade",
-    "email": "felix.adekunle@ng.com",
-    "age": 26,
-    "phone": "+234-803-456-7890",
-    "status": "active",
-    "address": "14 Admiralty Way, Lekki, Lagos 106104, Nigeria"
+    "name": "Felix Müller",
+    "email": "felix.mueller@email.com",
+    "age": 27,
+    "phone": "+49-170-3456789"
   },
   {
     "id": 7,
-    "name": "Grace Huang",
-    "username": "grace_h",
-    "email": "gracehuang@outlook.com",
-    "age": 31,
-    "phone": "+86-21-5555-8890",
-    "status": "active",
-    "address": "88 Nanjing Road, Shanghai 200001, China"
+    "name": "Grace Tanaka",
+    "email": "grace.tanaka@email.com",
+    "age": 38,
+    "phone": "+81-90-3456-7890"
   },
   {
     "id": 8,
-    "name": "Henry Walsh",
-    "username": "henrywalsh99",
-    "email": "h.walsh@irishmail.ie",
-    "age": 38,
-    "phone": "+353-1-555-2341",
-    "status": "inactive",
-    "address": "22 O'Connell Street, Dublin D01 A5R6, Ireland"
+    "name": "Hassan Al-Amin",
+    "email": "hassan.alamin@email.com",
+    "age": 52,
+    "phone": "+971-50-456-7890"
   },
   {
     "id": 9,
-    "name": "Isabelle Moreau",
-    "username": "isa_moreau",
-    "email": "isabelle.moreau@fr.com",
+    "name": "Isabelle Dupont",
+    "email": "isabelle.dupont@email.com",
     "age": 24,
-    "phone": "+33-1-5555-7812",
-    "status": "active",
-    "address": "9 Rue de Rivoli, Paris 75001, France"
+    "phone": "+33-6-45-67-89-01"
   },
   {
     "id": 10,
-    "name": "James Osei",
-    "username": "jamesosei",
-    "email": "james.osei@ghmail.com",
-    "age": 45,
-    "phone": "+233-24-555-6781",
-    "status": "active",
-    "address": "Plot 7 Independence Ave, Accra GA-100, Ghana"
+    "name": "James Adeyemi",
+    "email": "james.adeyemi@email.com",
+    "age": 31,
+    "phone": "+234-812-567-8901"
   },
   {
     "id": 11,
-    "name": "Kira Novak",
-    "username": "kiranovak",
-    "email": "kira.novak@czmail.cz",
-    "age": 27,
-    "phone": "+420-222-555-901",
-    "status": "suspended",
-    "address": "Václavské náměstí 1, Prague 110 00, Czech Republic"
+    "name": "Karen Patel",
+    "email": "karen.patel@email.com",
+    "age": 29,
+    "phone": "+91-98765-43210"
   },
   {
     "id": 12,
-    "name": "Liam Brennan",
-    "username": "liamb",
-    "email": "liam.brennan@ukmail.co.uk",
-    "age": 33,
-    "phone": "+44-20-5555-3498",
-    "status": "active",
-    "address": "15 Baker Street, London W1U 8ED, United Kingdom"
+    "name": "Liam O'Brien",
+    "email": "liam.obrien@email.com",
+    "age": 41,
+    "phone": "+353-87-678-9012"
   },
   {
     "id": 13,
-    "name": "Maya Patel",
-    "username": "mayapatel",
-    "email": "maya.patel@inmail.in",
-    "age": 30,
-    "phone": "+91-98765-43210",
-    "status": "active",
-    "address": "42 MG Road, Bengaluru, Karnataka 560001, India"
+    "name": "Mei Lin",
+    "email": "mei.lin@email.com",
+    "age": 26,
+    "phone": "+86-138-6789-0123"
   },
   {
     "id": 14,
-    "name": "Noah Fischer",
-    "username": "noah_fisch",
-    "email": "n.fischer@demail.de",
-    "age": 36,
-    "phone": "+49-30-5555-7623",
-    "status": "inactive",
-    "address": "Unter den Linden 5, Berlin 10117, Germany"
+    "name": "Noah Williams",
+    "email": "noah.williams@email.com",
+    "age": 33,
+    "phone": "+1-555-789-0123"
   },
   {
     "id": 15,
-    "name": "Olivia Chen",
-    "username": "olivia_chen",
-    "email": "olivia.chen@camail.ca",
-    "age": 23,
-    "phone": "+1-604-555-0177",
-    "status": "active",
-    "address": "300 Granville Street, Vancouver, BC V6C 1S4, Canada"
+    "name": "Olivia Santos",
+    "email": "olivia.santos@email.com",
+    "age": 47,
+    "phone": "+351-912-345-678"
   }
 ]
