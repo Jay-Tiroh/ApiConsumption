@@ -1,5 +1,6 @@
 import UserCard from "@/components/UserCard";
 import { User } from "@/constants/types";
+import fetchData from "@/hooks/UseAxios";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import { useEffect, useState } from "react";
 import {
@@ -19,20 +20,14 @@ export default function Index() {
 
   const [query, setQuery] = useState("");
 
-  const getUsers = async () => {
-    try {
-      const res = await fetch("https://jsonplaceholder.typicode.com/users");
-      const data = await res.json();
-      setUsers(data);
-      setFilteredUsers(data); // ✅ use data, not users
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const getUsers = async () => {
+      const data = await fetchData();
+      setUsers(data);
+      setFilteredUsers(data);
+      setIsLoading(false);
+    };
+
     getUsers();
   }, []);
 
@@ -53,10 +48,6 @@ export default function Index() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Bg
-        preserveAspectRatio="xMidYMid slice"
-        style={StyleSheet.absoluteFill}
-      /> */}
       <Text style={styles.header}>Users List</Text>
       <View style={styles.searchBar}>
         <Fontisto
@@ -74,6 +65,7 @@ export default function Index() {
           // value={value}
           onChange={(e) => {
             setQuery(e.nativeEvent.text);
+            filterUsers(e.nativeEvent.text);
           }}
           onSubmitEditing={() => {
             filterUsers(query);
@@ -133,8 +125,6 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flexDirection: "row",
-    // borderWidth: 1,
-    // borderColor: "gray",
     borderRadius: 8,
     paddingVertical: 3,
     paddingHorizontal: 16,

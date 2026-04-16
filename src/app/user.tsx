@@ -1,10 +1,12 @@
 import { srcMap } from "@/constants/data";
 import { User } from "@/constants/types";
+import fetchData from "@/hooks/UseAxios";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,21 +20,13 @@ const modal = () => {
   const [user, setUser] = useState<User | null>(null);
   const { userId } = useLocalSearchParams<{ userId: string }>();
 
-  const getUser = async () => {
-    try {
-      const res = await fetch(
-        `https://jsonplaceholder.typicode.com/users/${userId}`,
-      );
-      const data = await res.json();
-      setUser(data);
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const getUser = async () => {
+      const data = await fetchData(userId);
+      setUser(data);
+      setIsLoading(false);
+    };
+
     getUser();
   }, []);
 
@@ -54,42 +48,46 @@ const modal = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.profileCard}>
-          {/* Avatar + name */}
-          <View style={{ alignItems: "center", gap: 3 }}>
-            <Image source={src} style={styles.image} />
-            <Text style={styles.name}>{user?.name}</Text>
-            <Text style={styles.email}>{user?.username}</Text>
+        {isLoading ? (
+          <ActivityIndicator style={{ flex: 1, marginVertical: 80 }} />
+        ) : (
+          <View style={styles.profileCard}>
+            {/* Avatar + name */}
+            <View style={{ alignItems: "center", gap: 3 }}>
+              <Image source={src} style={styles.image} />
+              <Text style={styles.name}>{user?.name}</Text>
+              <Text style={styles.email}>{user?.username}</Text>
+            </View>
+
+            {/* Bio */}
+            <Section title="Bio">
+              {Object.entries(user || {})
+                .filter(([key]) => !skippedKeys.includes(key))
+                .map(([key, value]) => (
+                  <Row key={key} label={key} value={String(value)} />
+                ))}
+            </Section>
+
+            {/* Address */}
+            <Section title="Address Information">
+              {Object.entries(user?.address || {})
+                .filter(([key]) => key !== "geo")
+                .map(([key, value]) => (
+                  <Row key={key} label={key} value={String(value)} />
+                ))}
+              {Object.entries(user?.address?.geo || {}).map(([key, value]) => (
+                <Row key={key} label={key} value={String(value)} />
+              ))}
+            </Section>
+
+            {/* Company */}
+            <Section title="Company Details">
+              {Object.entries(user?.company || {}).map(([key, value]) => (
+                <Row key={key} label={key} value={String(value)} />
+              ))}
+            </Section>
           </View>
-
-          {/* Bio */}
-          <Section title="Bio">
-            {Object.entries(user || {})
-              .filter(([key]) => !skippedKeys.includes(key))
-              .map(([key, value]) => (
-                <Row key={key} label={key} value={String(value)} />
-              ))}
-          </Section>
-
-          {/* Address */}
-          <Section title="Address Information">
-            {Object.entries(user?.address || {})
-              .filter(([key]) => key !== "geo")
-              .map(([key, value]) => (
-                <Row key={key} label={key} value={String(value)} />
-              ))}
-            {Object.entries(user?.address?.geo || {}).map(([key, value]) => (
-              <Row key={key} label={key} value={String(value)} />
-            ))}
-          </Section>
-
-          {/* Company */}
-          <Section title="Company Details">
-            {Object.entries(user?.company || {}).map(([key, value]) => (
-              <Row key={key} label={key} value={String(value)} />
-            ))}
-          </Section>
-        </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
