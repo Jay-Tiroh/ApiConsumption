@@ -2,7 +2,8 @@ import UserCard from "@/components/UserCard";
 import { User } from "@/constants/types";
 import fetchData from "@/hooks/UseAxios";
 import Fontisto from "@expo/vector-icons/Fontisto";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -14,38 +15,22 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 export default function Index() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-
   const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await fetchData();
-      setUsers(data);
-      setFilteredUsers(data);
-      setIsLoading(false);
-    };
+  const { data: users = [], status } = useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => fetchData(),
+  });
 
-    getUsers();
-  }, []);
+  const filteredUsers = useMemo(() => {
+    if (!query) return users;
 
-  const [promptText, setPromptText] = useState("All users");
-
-  const filterUsers = (query: string) => {
-    if (!query) {
-      setFilteredUsers(users);
-      setPromptText("All users");
-      return;
-    } //Leave as original list if query is empty
-    const filtered = users.filter((user) =>
+    return users.filter((user) =>
       user.name.toLowerCase().includes(query.toLowerCase()),
     );
-    setFilteredUsers(filtered);
-    setPromptText(`Search results for "${query}"`);
-  };
+  }, [users, query]);
 
+  const promptText = query ? `Search results for "${query}"` : "All users";
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Users List</Text>
@@ -55,7 +40,7 @@ export default function Index() {
           size={16}
           color="#3b3b3b"
           onPress={() => {
-            filterUsers(query);
+            setQuery(query);
           }}
         />
         <TextInput
@@ -65,15 +50,17 @@ export default function Index() {
           // value={value}
           onChange={(e) => {
             setQuery(e.nativeEvent.text);
-            filterUsers(e.nativeEvent.text);
           }}
           onSubmitEditing={() => {
-            filterUsers(query);
+            setQuery(query);
           }}
         />
       </View>
-      {isLoading ? (
+      {status === "pending" && (
         <ActivityIndicator size="large" color="#000131" />
+      )}
+      {status === "error" ? (
+        <Text>Error fetching users</Text>
       ) : (
         <FlatList
           data={filteredUsers}

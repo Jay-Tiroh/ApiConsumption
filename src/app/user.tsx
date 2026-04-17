@@ -1,10 +1,10 @@
 import { srcMap } from "@/constants/data";
-import { User } from "@/constants/types";
 import fetchData from "@/hooks/UseAxios";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -16,19 +16,16 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const modal = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
   const { userId } = useLocalSearchParams<{ userId: string }>();
 
-  useEffect(() => {
-    const getUser = async () => {
-      const data = await fetchData(userId);
-      setUser(data);
-      setIsLoading(false);
-    };
-
-    getUser();
-  }, []);
+  const {
+    data: user,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => fetchData(userId),
+  });
 
   const src = srcMap[user?.id as keyof typeof srcMap];
   const skippedKeys = ["id", "name", "username", "address", "company"];
@@ -48,8 +45,11 @@ const modal = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {isLoading ? (
+        {isPending && (
           <ActivityIndicator style={{ flex: 1, marginVertical: 80 }} />
+        )}
+        {isError ? (
+          <Text>Error fetching user</Text>
         ) : (
           <View style={styles.profileCard}>
             {/* Avatar + name */}
