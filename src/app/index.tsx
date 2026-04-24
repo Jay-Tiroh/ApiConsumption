@@ -1,5 +1,6 @@
 import UserCard from "@/components/UserCard";
-import { User } from "@/constants/types";
+import { AppDispatch, RootState } from "@/redux/store";
+import { fetchUsers } from "@/redux/user/usersSlice";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import { useEffect, useState } from "react";
 import {
@@ -10,78 +11,52 @@ import {
   TextInput,
   View,
 } from "react-native";
-
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch, useSelector } from "react-redux";
+
 export default function Index() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-
   const [query, setQuery] = useState("");
-
-  const getUsers = async () => {
-    try {
-      const res = await fetch("https://jsonplaceholder.typicode.com/users");
-      const data = await res.json();
-      setUsers(data);
-      setFilteredUsers(data); // ✅ use data, not users
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getUsers();
-  }, []);
-
   const [promptText, setPromptText] = useState("All users");
 
-  const filterUsers = (query: string) => {
-    if (!query) {
-      setFilteredUsers(users);
-      setPromptText("All users");
-      return;
-    } //Leave as original list if query is empty
-    const filtered = users.filter((user) =>
-      user.name.toLowerCase().includes(query.toLowerCase()),
-    );
-    setFilteredUsers(filtered);
-    setPromptText(`Search results for "${query}"`);
+  const dispatch = useDispatch<AppDispatch>();
+  const users = useSelector((state: RootState) => state.users.data);
+  const isLoading = useSelector((state: RootState) => state.users.loading);
+  const error = useSelector((state: RootState) => state.users.error);
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  const filteredUsers = query
+    ? users.filter((user) =>
+        user.name.toLowerCase().includes(query.toLowerCase()),
+      )
+    : users;
+
+  const filterUsers = (text: string) => {
+    setQuery(text);
+    setPromptText(text ? `Search results for "${text}"` : "All users");
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Bg
-        preserveAspectRatio="xMidYMid slice"
-        style={StyleSheet.absoluteFill}
-      /> */}
       <Text style={styles.header}>Users List</Text>
       <View style={styles.searchBar}>
-        <Fontisto
-          name="search"
-          size={16}
-          color="#3b3b3b"
-          onPress={() => {
-            filterUsers(query);
-          }}
-        />
+        <Fontisto name="search" size={16} color="#3b3b3b" />
         <TextInput
           placeholder="Search users..."
           style={styles.searchInput}
           placeholderTextColor={"#888"}
-          // value={value}
           onChange={(e) => {
-            setQuery(e.nativeEvent.text);
+            filterUsers(e.nativeEvent.text);
           }}
-          onSubmitEditing={() => {
-            filterUsers(query);
-          }}
+          onSubmitEditing={() => filterUsers(query)}
         />
       </View>
       {isLoading ? (
         <ActivityIndicator size="large" color="#000131" />
+      ) : error ? (
+        <Text>Error: {error}</Text>
       ) : (
         <FlatList
           data={filteredUsers}
@@ -97,9 +72,7 @@ export default function Index() {
           ListHeaderComponent={() => (
             <Text style={styles.h1}>{promptText}</Text>
           )}
-          ItemSeparatorComponent={() => (
-            <View style={{ height: 12 }} /> // vertical gap between rows
-          )}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={() => <Text>No users found</Text>}
         />

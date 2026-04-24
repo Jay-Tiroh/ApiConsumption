@@ -1,5 +1,7 @@
 import { srcMap } from "@/constants/data";
 import { User } from "@/constants/types";
+import { AppDispatch, RootState } from "@/redux/store";
+import { fetchUser } from "@/redux/user/userSlice";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -12,30 +14,19 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch, useSelector } from "react-redux";
 
-const modal = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+const Modal = () => {
   const { userId } = useLocalSearchParams<{ userId: string }>();
-
-  const getUser = async () => {
-    try {
-      const res = await fetch(
-        `https://jsonplaceholder.typicode.com/users/${userId}`,
-      );
-      const data = await res.json();
-      setUser(data);
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  
+  const dispatch = useDispatch<AppDispatch>();
+  
   useEffect(() => {
-    getUser();
-  }, []);
-
+    dispatch(fetchUser(userId));
+  }, [userId, dispatch]);
+  
+  const user = useSelector((state: RootState) => state.user.data);
+  
   const src = srcMap[user?.id as keyof typeof srcMap];
   const skippedKeys = ["id", "name", "username", "address", "company"];
   const navigation = useRouter();
@@ -121,7 +112,7 @@ const Row = ({ label, value }: { label: string; value: string }) => (
 
 // ── styles ───────────────────────────────────────────────
 
-export default modal;
+export default Modal;
 
 const styles = StyleSheet.create({
   container: {
